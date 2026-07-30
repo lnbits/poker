@@ -2,7 +2,7 @@
   "id": "poker",
   "name": "Poker",
   "short_description": "Play paid best-of-five heads-up Draw Poker with tactile cards and Lightning payouts.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "min_lnbits_version": "1.5.6",
   "tile": "/ext-assets/poker/assets/icon.svg",
   "tags": ["gaming", "poker", "cards", "wasm"],
