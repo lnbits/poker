@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Poker</title>
+    <link rel="stylesheet" href="/ext-assets/poker/_lnbits/bundle.min.css" />
+    <link rel="stylesheet" href="/ext-assets/poker/_lnbits/material-icons.css" />
+    <link rel="stylesheet" href="/ext-assets/poker/app.css" />
+  </head>
+  <body data-theme="bitcoin" class="body--dark">
+    <main class="admin-shell">
+      <header class="brand-row">
+        <div class="poker-mark">♠</div>
+        <div>
+          <p class="eyebrow">LNbits WASM table</p>
+          <h1>Poker</h1>
+          <p class="muted">Create paid, best-of-five heads-up Draw Poker matches.</p>
+        </div>
+      </header>
+
+      <section class="admin-grid">
+        <article class="glass-panel">
+          <h2>Table settings</h2>
+          <label class="switch-row">
+            <input id="enabled-input" type="checkbox" />
+            <span>Enable new Poker games</span>
+          </label>
+          <label>
+            <span>Receiving wallet</span>
+            <select id="wallet-input"></select>
+          </label>
+          <label>
+            <span>House cut (%)</span>
+            <input id="haircut-input" type="number" min="0" max="99" step="0.1" value="0" />
+          </label>
+          <button id="save-settings" class="primary-button" type="button">Save settings</button>
+        </article>
+
+        <article class="glass-panel">
+          <h2>Open a table</h2>
+          <label>
+            <span>Game name</span>
+            <input id="name-input" maxlength="80" value="Friday night draw" />
+          </label>
+          <label>
+            <span>Seat price (sats)</span>
+            <input id="amount-input" type="number" min="20" step="1" value="100" />
+          </label>
+          <p class="hint">Two equal seats fund the pot. The first player to win three hands receives the pot minus the configured cut.</p>
+          <button id="create-game" class="primary-button" type="button">Deal a new table</button>
+        </article>
+      </section>
+
+      <section class="glass-panel games-panel">
+        <div class="section-row">
+          <div>
+            <p class="eyebrow">Your tables</p>
+            <h2>Recent games</h2>
+          </div>
+          <button id="refresh-games" class="ghost-button" type="button">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Game</th><th>Seat</th><th>Players</th><th>Status</th><th></th></tr></thead>
+            <tbody id="game-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script src="/ext-assets/poker/lnbits-extension-sdk.js"></script>
+    <script src="/ext-assets/poker/admin.js?v=best-of-five-1"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+{
+  "id": "poker",
+  "name": "Poker",
+  "short_description": "Play paid best-of-five heads-up Draw Poker with tactile cards and Lightning payouts.",
+  "version": "0.2.0",
+  "min_lnbits_version": "1.5.6",
+  "tile": "/ext-assets/poker/assets/icon.svg",
+  "tags": ["gaming", "poker", "cards", "wasm"],
+  "extension_type": "wasm",
+  "wasm": {
+    "module": "wasm/module.wasm",
+    "world": "poker",
+    "exports": [
+      {"name": "get-poker-settings", "visibility": "authenticated"},
+      {"name": "save-poker-settings", "visibility": "authenticated"},
+      {"name": "list-poker-wallets", "visibility": "authenticated"},
+      {"name": "create-poker-game", "visibility": "authenticated"},
+      {"name": "list-poker-games", "visibility": "authenticated"},
+      {"name": "delete-poker-game", "visibility": "authenticated"},
+      {"name": "get-public-poker-game", "visibility": "public"},
+      {"name": "join-poker-game", "visibility": "public"},
+      {"name": "draw-poker-cards", "visibility": "public"},
+      {"name": "fold-poker-game", "visibility": "public"},
+      {"name": "start-next-poker-hand", "visibility": "public"},
+      {"name": "settle-player-poker-payout", "visibility": "public"},
+      {"name": "settle-poker-game", "visibility": "authenticated"},
+      {"name": "record-poker-payment", "visibility": "event"}
+    ]
+  },
+  "events": {
+    "onInvoicePaid": "record-poker-payment"
+  },
+  "ui_routes": [
+    {"path": "/poker", "entrypoint": "ui/admin.html", "auth": "user"},
+    {
+      "path": "/poker/games/{game_id}",
+      "entrypoint": "ui/public.html",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"}
+    }
+  ],
+  "api_routes": [
+    {"method": "GET", "path": "/settings", "export": "get-poker-settings", "auth": "user"},
+    {"method": "PUT", "path": "/settings", "export": "save-poker-settings", "auth": "user"},
+    {"method": "GET", "path": "/wallets", "export": "list-poker-wallets", "auth": "user"},
+    {"method": "POST", "path": "/games", "export": "create-poker-game", "auth": "user"},
+    {"method": "GET", "path": "/games", "export": "list-poker-games", "auth": "user"},
+    {
+      "method": "DELETE",
+      "path": "/games/{game_id}",
+      "export": "delete-poker-game",
+      "auth": "user",
+      "path_params": {"game_id": "gameId"}
+    },
+    {
+      "method": "GET",
+      "path": "/games/{game_id}",
+      "export": "get-public-poker-game",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/join",
+      "export": "join-poker-game",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/draw",
+      "export": "draw-poker-cards",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/fold",
+      "export": "fold-poker-game",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/next-hand",
+      "export": "start-next-poker-hand",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/payout",
+      "export": "settle-player-poker-payout",
+      "auth": "public",
+      "path_params": {"game_id": "gameId"},
+      "ownerContext": {"table": "poker_games", "idParam": "gameId"}
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/settle",
+      "export": "settle-poker-game",
+      "auth": "user",
+      "path_params": {"game_id": "gameId"}
+    }
+  ],
+  "permissions": [
+    {
+      "id": "ext.storage.read",
+      "description": "Read Poker settings, games, private hands, players, and actions."
+    },
+    {
+      "id": "ext.storage.write",
+      "description": "Write Poker settings, games, private hands, players, actions, and payment state."
+    },
+    {
+      "id": "wallet.list",
+      "description": "Show the installing user's wallets for Poker receipts."
+    },
+    {
+      "id": "wallet.create_invoice_public",
+      "description": "Create public Poker seat invoices.",
+      "policies": [{"table": "poker_games", "wallet_field": "wallet_id"}]
+    },
+    {
+      "id": "wallet.pay_invoice",
+      "description": "Pay Poker winnings and refunds to Lightning addresses."
+    },
+    {
+      "id": "wallet.pay_invoice_background",
+      "description": "Pay Poker winnings and refunds after a hand."
+    },
+    {
+      "id": "websocket.publish",
+      "description": "Publish Poker seat, draw, fold, showdown, and payout updates.",
+      "policies": [{"max_messages_per_second": 20}]
+    },
+    {
+      "id": "websocket.subscribe",
+      "description": "Receive live Poker game updates."
+    }
+  ]
+}

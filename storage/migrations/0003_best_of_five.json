@@ -1,0 +1,40 @@
+{
+  "version": 3,
+  "operations": [
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "match_target",
+      "type": "integer",
+      "default": 1
+    },
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "hand_number",
+      "type": "integer",
+      "default": 1
+    },
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "player1_score",
+      "type": "integer",
+      "default": 0
+    },
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "player2_score",
+      "type": "integer",
+      "default": 0
+    },
+    {
+      "op": "add_field",
+      "table": "poker_actions",
+      "field": "hand_number",
+      "type": "integer",
+      "default": 1
+    }
+  ]
+}

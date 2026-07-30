@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Poker</title>
+    <link rel="stylesheet" href="/ext-assets/poker/_lnbits/bundle.min.css" />
+    <link rel="stylesheet" href="/ext-assets/poker/app.css" />
+  </head>
+  <body class="poker-body">
+    <main class="table-shell">
+      <header class="public-header">
+        <div class="brand-row compact">
+          <div class="poker-mark">♠</div>
+          <div><p class="eyebrow">Best-of-5 Five-Card Draw</p><h1 id="game-title">Loading table…</h1></div>
+        </div>
+        <button id="copy-game" class="ghost-button">Copy invite</button>
+      </header>
+
+      <section class="poker-table">
+        <div class="felt-grain"></div>
+        <div class="opponent-zone">
+          <div id="opponent-name" class="seat-name">Waiting for opponent</div>
+          <div id="opponent-hand" class="card-row opponent-cards"></div>
+          <div id="opponent-action" class="action-chip" hidden></div>
+        </div>
+
+        <div class="table-center">
+          <div class="deck-stack" aria-label="Deck"><i></i><i></i><i></i></div>
+          <div class="pot">
+            <span class="chip-stack">₿</span>
+            <div><small>THE POT</small><strong id="pot-value">0 sats</strong></div>
+          </div>
+          <div class="match-score" aria-label="Match score">
+            <small id="hand-number">HAND 1 · FIRST TO 3</small>
+            <strong><span id="player1-score">0</span><i>–</i><span id="player2-score">0</span></strong>
+          </div>
+          <div id="turn-badge" class="turn-badge">Waiting for players</div>
+        </div>
+
+        <div id="hand-result-overlay" class="hand-result-overlay" hidden>
+          <small id="hand-result-kicker">HAND COMPLETE</small>
+          <strong id="hand-result-title">Player won the hand</strong>
+          <span>Shuffling the next hand…</span>
+        </div>
+
+        <div class="player-zone">
+          <div id="discard-tray" class="discard-tray">
+            <span>Drag up to 3 cards here</span>
+          </div>
+          <div id="player-hand" class="card-row player-cards"></div>
+          <div class="player-meta">
+            <div><span id="player-name" class="seat-name">Spectating</span><small id="hand-hint">Join to receive a private hand</small></div>
+            <div class="game-controls">
+              <button id="fold-button" class="danger-button" hidden>Fold</button>
+              <button id="draw-button" class="deal-button" hidden>Draw cards</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="below-table">
+        <article id="join-panel" class="glass-panel join-panel">
+          <p class="eyebrow">Take a seat</p>
+          <h2><span id="seat-price">0</span> sats to play</h2>
+          <p class="muted">Enter the Lightning address where winnings should be sent.</p>
+          <div class="join-row">
+            <input id="ln-address" placeholder="you@example.com" autocomplete="email" />
+            <button id="join-button" class="primary-button">Pay &amp; join</button>
+          </div>
+        </article>
+
+        <article class="glass-panel game-info">
+          <div><small>PLAYERS</small><strong id="players-value">0 / 2</strong></div>
+          <div><small>WINNER GETS</small><strong id="winner-value">0 sats</strong></div>
+          <div><small>HOUSE CUT</small><strong id="cut-value">0%</strong></div>
+          <div><small>SHUFFLE PROOF</small><strong id="proof-value" class="proof">Committed</strong></div>
+        </article>
+
+        <article class="glass-panel history-panel">
+          <div class="section-row"><div><p class="eyebrow">Hand log</p><h2 id="result-title">Cards on the felt</h2></div></div>
+          <ol id="action-list" class="action-list"></ol>
+        </article>
+      </section>
+    </main>
+
+    <div id="invoice-dialog" class="modal" hidden>
+      <button class="modal-backdrop" data-close-invoice aria-label="Close"></button>
+      <div class="modal-card">
+        <div class="section-row"><h2>Buy your seat</h2><button class="ghost-button" data-close-invoice>Close</button></div>
+        <div id="invoice-qr" class="invoice-qr"></div>
+        <p id="invoice-status" class="muted centered">Waiting for Lightning payment…</p>
+        <button id="copy-invoice" class="primary-button full-width">Copy invoice</button>
+      </div>
+    </div>
+    <div id="toast" class="toast" hidden></div>
+    <div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+
+    <script src="/ext-assets/poker/_lnbits/vue.global.prod.js"></script>
+    <script src="/ext-assets/poker/_lnbits/qrcode.vue.browser.js"></script>
+    <script src="/ext-assets/poker/lnbits-extension-sdk.js"></script>
+    <script src="/ext-assets/poker/public.js?v=auto-next-hand-1"></script>
+  </body>
+</html>

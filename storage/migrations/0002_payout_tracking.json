@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "operations": [
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "player1_payout_payment_hash",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "op": "add_field",
+      "table": "poker_games",
+      "field": "player2_payout_payment_hash",
+      "type": "string",
+      "default": ""
+    }
+  ]
+}

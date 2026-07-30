@@ -1,0 +1,9 @@
+{
+  "name": "lnbits-poker-wasm",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:wasm": "node scripts/bundle.mjs && npx --yes @bytecodealliance/jco componentize dist/index.bundle.js --disable all --enable clocks --enable random --enable stdio --wit ../wasm/lnbits-extension.wit --world-name poker -o ../wasm/module.wasm",
+    "check": "node --check src/index.js && node --check ../static/lnbits-extension-sdk.js && node --check ../static/admin.js && node --check ../static/public.js && node test/poker.test.js"
+  }
+}
