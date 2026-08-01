@@ -223,6 +223,29 @@ function pay(api, gameId, paymentHash, lnAddress, amount = 100000) {
 }
 
 {
+  const {api, tables} = createHarness()
+  const first = call(api.savePokerSettings, {
+    enabled: true,
+    walletId: 'wallet-1',
+    walletName: 'Poker Bank',
+    haircut: 5
+  })
+  const second = call(api.savePokerSettings, {
+    enabled: true,
+    walletId: 'wallet-2',
+    walletName: 'Second Poker Bank',
+    haircut: 10
+  })
+  const loaded = call(api.getPokerSettings)
+  assert.equal(first.settings.id, 'poker-settings-1')
+  assert.equal(second.settings.id, first.settings.id)
+  assert.equal(second.settings.walletId, 'wallet-2')
+  assert.equal(second.settings.haircut, 10)
+  assert.deepEqual(loaded.settings, second.settings)
+  assert.equal(tables.get('poker_settings').size, 1)
+}
+
+{
   const {api, tables, payments} = createHarness()
   call(api.savePokerSettings, {
     enabled: true,
@@ -237,7 +260,7 @@ function pay(api, gameId, paymentHash, lnAddress, amount = 100000) {
     matchTarget: 1
   })
   assert.equal(created.game.status, 'waiting')
-  assert.equal(created.game.deckCommitment, api.sha256('deck-1:seed-2'))
+  assert.equal(created.game.deckCommitment, api.sha256('deck-2:seed-3'))
   assert.equal(JSON.parse(tables.get('poker_secrets').get('game-flow').deck_json).length, 52)
   assert.match(
     failed(api.createPokerGame, {id: 'game-flow', joinAmount: 100}),
@@ -314,7 +337,7 @@ function pay(api, gameId, paymentHash, lnAddress, amount = 100000) {
     discardIndices: []
   })
   assert(['completed', 'draw'].includes(finished.game.status))
-  assert.equal(finished.game.revealedSeed, 'deck-1:seed-2')
+  assert.equal(finished.game.revealedSeed, 'deck-2:seed-3')
   view = call(api.getPublicPokerGame, {gameId: 'game-flow'})
   assert(view.player1Hand.every(card => card.code))
   assert(view.player2Hand.every(card => card.code))
@@ -601,7 +624,7 @@ function pay(api, gameId, paymentHash, lnAddress, amount = 100000) {
   assert.equal(tie.game.winnerSeat, '')
   assert.equal(tie.game.winnerLnAddress, '')
   assert.equal(tie.game.payoutPending, false)
-  assert.equal(tie.game.revealedSeed, 'deck-1:seed-2')
+  assert.equal(tie.game.revealedSeed, 'deck-2:seed-3')
   assert.equal(payments.length, 0)
   const next = call(api.startNextPokerHand, {
     gameId: 'match-tie',

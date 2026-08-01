@@ -79,7 +79,6 @@ const GAMES_TABLE = 'poker_games'
 const PLAYERS_TABLE = 'poker_players'
 const SECRETS_TABLE = 'poker_secrets'
 const ACTIONS_TABLE = 'poker_actions'
-const SETTINGS_ID = 'poker-settings'
 const MIN_JOIN_SATS = 20
 const MAX_JOIN_SATS = 100000000
 const MAX_DISCARDS = 3
@@ -113,7 +112,7 @@ export function savePokerSettings(requestJson) {
     const now = system.now()
     const walletId = cleanText(request.walletId ?? request.wallet_id, 128)
     const settings = {
-      id: SETTINGS_ID,
+      id: existing.id || newSettingsId(),
       wallet_id: walletId,
       wallet_name: cleanText(request.walletName ?? request.wallet_name, 120) || walletId,
       enabled: request.enabled === true,
@@ -1197,13 +1196,26 @@ function rankSingular(value) {
 }
 
 function getSettings() {
-  return storage.get(SETTINGS_TABLE, SETTINGS_ID, defaultSettings())
+  const response = storage.getPaginated(SETTINGS_TABLE, {
+    sortBy: 'created_at',
+    descending: false,
+    limit: 1,
+    offset: 0
+  })
+  return response.data[0] || defaultSettings()
+}
+
+function newSettingsId() {
+  const generatedId = system.id('poker-settings')
+  const settingsId = typeof generatedId === 'string' ? generatedId : generatedId?.id
+  if (!settingsId) throw new Error('Could not generate a Poker settings ID.')
+  return settingsId
 }
 
 function defaultSettings() {
   const now = system.now()
   return {
-    id: SETTINGS_ID,
+    id: '',
     wallet_id: '',
     wallet_name: '',
     enabled: false,
